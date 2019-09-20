@@ -1,0 +1,61 @@
+.header input {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #fff;
+  width: 165px;
+  margin-right: 10px;
+  box-shadow: 0px 0px 15px -6px rgba(0, 0, 0, 0.66);
+  outline: none !important; /* Force le navigateur a mettre l'outline à nul ! */
+}
+.header button {
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  border: 2px solid #3379e8;
+  background-color: #3379e8;
+  margin: 5px;
+  transition: opacity 0.15s ease-out;
+}
+.header button:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+.listItems {
+  padding-left: 0px;
+}
+.listItems li {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.listItems li span {
+  cursor: pointer;
+}
+.listItems li span:hover {
+  color: white;
+}
+.listItems li svg {
+  font-size: 18px;
+  color: #e14641;
+  transition: color 0.15s ease-out;
+}
+.listItems li svg:hover {
+  color: #cf7d7b;
+}
+.listItems .item {
+  color: #333;
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  transition: box-shadow 0.15s ease-out, background-color 0.15s ease-out;
+  flex-grow: 1;
+  margin-right: 10px;
+  box-shadow: 0px 0px 15px -6px rgba(0, 0, 0, 0.66);
+}
+.listItems .item:hover {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 0px 10px -6px rgba(0, 0, 0, 0.66);
+}
