@@ -10,3 +10,9 @@ export function addTodo(item) {
     payload: item
   };
 }
+export function deleteTodo(item) {
+  return {
+    type: "DELETE_ITEM",
+    payload: item
+  };
+}

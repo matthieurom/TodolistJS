@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { deleteTodo } from "../actions/todoActions";
 
 class TodoItems extends React.Component {
   state = {
@@ -23,9 +24,9 @@ class TodoItems extends React.Component {
     });
   };
 
-  handleModifyDescription = () => {};
-
-  handleCloseDescription;
+  onDeleteTodo = item => {
+    this.props.deleteTodo(item);
+  };
 
   renderTask = item => {
     return (
@@ -50,10 +51,7 @@ class TodoItems extends React.Component {
             </div>
           </div>
         </div>
-        <span
-          className="deleterTask"
-          onClick={() => this.props.onDelete(item._id)}
-        >
+        <span className="deleterTask" onClick={() => this.onDeleteTodo(item)}>
           <FontAwesomeIcon icon={faTrash} />{" "}
         </span>
       </li>
@@ -80,4 +78,11 @@ const mapStateToProps = state => {
   return state;
 };
 
-export default connect(mapStateToProps)(TodoItems);
+const mapActionsToProps = {
+  deleteTodo: deleteTodo
+};
+
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(TodoItems);

@@ -35,6 +35,9 @@ export default function todoReducer(state = initialState, action) {
     case "ADD_ITEM":
       newItems = state.items.concat(action.payload);
       return { ...state, items: newItems };
+    case "DELETE_ITEM":
+      newItems = state.items.filter(item => item._id !== action.payload._id);
+      return { ...state, items: newItems };
     default:
       return state;
   }
