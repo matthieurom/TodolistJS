@@ -65,18 +65,19 @@ class CreateTask extends React.Component {
     if (!this.state.item && itemFromProps) {
       // On utilse la méthode componentDidMount pour préremplir les champ input après avoir cliqué sur todo
       this.setState({
-        item: itemFromProps
+        item: itemFromProps,
+        inputTitleValue: itemFromProps.titre
       });
     }
   }
 
-  handleTitleChange = e => {
-    var item = this.getItem();
-    var updateItem = {
-      ...item,
-      titre: e.target.value
-    };
-    this.setState({ inputTitleValue: e.target.value });
+  handleTitleChange = (e, item) => {
+    var updateItem = this.getItem();
+    if (updateItem) {
+      this.setState({ inputTitleValue: e.target.value });
+    } else {
+      return item.titre;
+    }
   };
 
   render() {
@@ -107,7 +108,7 @@ class CreateTask extends React.Component {
               placeholder={isIdParamEntered ? item.titre : "Enter a task name"}
               ref={a => (this._inputTitleElement = a)}
               value={this.state.inputTitleValue}
-              onChange={e => this.handleTitleChange(e)}
+              onChange={e => this.handleTitleChange(e, item)}
             ></input>
             <textarea
               placeholder="Enter a description"
