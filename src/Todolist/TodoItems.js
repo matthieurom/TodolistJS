@@ -5,6 +5,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { deleteTodo } from "../actions/todoActions";
+import axios from "axios";
 
 class TodoItems extends React.Component {
   state = {
@@ -24,8 +25,10 @@ class TodoItems extends React.Component {
     });
   };
 
-  onDeleteTodo = item => {
-    this.props.deleteTodo(item);
+  onDeleteTodo = async item => {
+    console.log("Props in onDeleteTodo :", this.props);
+    const response = await axios.delete(`http://localhost:8080/${item._id}`);
+    this.props.deleteTodo(response.data);
   };
 
   renderTask = item => {
@@ -44,9 +47,7 @@ class TodoItems extends React.Component {
                 Close description
               </button>
               <Link to={`/update/${item._id}`}>
-                <button onClick={this.handleModifyDescription}>
-                  Modify task
-                </button>
+                <button>Modify task</button>
               </Link>
             </div>
           </div>
@@ -58,10 +59,9 @@ class TodoItems extends React.Component {
     );
   };
   render() {
-    console.log("Props in TodoItems : ", this.props);
-    var todoEntries = this.props.entries;
+    var todoEntries = this.props.entries; // Permet de récupérer les items
     var listItems = todoEntries
-      .filter(item => item.titre.includes(this.props.value))
+      .filter(item => item.titre.includes(this.props.value)) // .filter pour filtrer p/rapport au input tapé dans searchbar
       .map(this.renderTask);
 
     return (

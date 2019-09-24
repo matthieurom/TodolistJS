@@ -16,3 +16,9 @@ export function deleteTodo(item) {
     payload: item
   };
 }
+export function setTodo(item) {
+  return {
+    type: "SET_ITEM",
+    payload: item
+  };
+}

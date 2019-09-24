@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import "./index.css";
 import { connect } from "react-redux";
 import { updateTodo, addTodo } from "../actions/todoActions";
+import axios from "axios";
 
 class CreateTask extends React.Component {
   state = {
+    item: null,
     inputTitleValue: ""
   };
   // Cette fonction vérifie si l'ID est passé par l'url, si oui alors on est dans une modif de tache sinon dans une création de tache
@@ -29,6 +31,7 @@ class CreateTask extends React.Component {
   };
 
   onUpdateTodo = e => {
+    console.log("Props in onUpdateTodo :", this.props);
     e.preventDefault();
     var item = this.getItem();
     var updateItem = {
@@ -36,38 +39,44 @@ class CreateTask extends React.Component {
       titre: this._inputTitleElement.value,
       description: this._textAreaDescriptionElement.value
     };
-    this.props.updateTodo(updateItem);
+    axios
+      .patch(`http://localhost:8080/${item._id}`, updateItem)
+      .then(response => this.props.updateTodo(response.data));
+    // this.props.updateTodo(updateItem);
     this.props.history.push("/");
   };
 
   addItem = e => {
+    console.log("ADDITEM EXECUTED");
     e.preventDefault();
-    var newItem = {
-      _id:
-        "_" +
-        Math.random()
-          .toString(36)
-          .substr(2, 9),
-      titre: this._inputTitleElement.value,
-      description: this._textAreaDescriptionElement.value
-    };
-    this.props.addTodo(newItem);
-    this.props.history.push("/");
+    axios
+      .post("http://localhost:8080", {
+        titre: this._inputTitleElement.value,
+        description: this._textAreaDescriptionElement.value
+      })
+      .then(response => {
+        this.props.addTodo(response.data);
+        this.props.history.push("/");
+      });
   };
 
-  componentDidMount() {
-    // On utilse la méthode componentDidMount pour préremplir les champ input après avoir cliqué sur todo
-    if (this.isIdParamEntered()) {
+  componentDidUpdate() {
+    const itemFromProps = this.getItem();
+    if (!this.state.item && itemFromProps) {
+      // On utilse la méthode componentDidMount pour préremplir les champ input après avoir cliqué sur todo
       this.setState({
-        inputTitleValue: this.getItem().titre
+        item: itemFromProps
       });
     }
   }
 
   handleTitleChange = e => {
-    this.setState({
-      inputTitleValue: e.target.value
-    });
+    var item = this.getItem();
+    var updateItem = {
+      ...item,
+      titre: e.target.value
+    };
+    this.setState({ inputTitleValue: e.target.value });
   };
 
   render() {
@@ -104,7 +113,9 @@ class CreateTask extends React.Component {
               placeholder="Enter a description"
               ref={a => (this._textAreaDescriptionElement = a)}
             >
-              {isIdParamEntered ? item.description : ""}
+              {isIdParamEntered
+                ? item.description
+                : "" /*SI un id est entré alors on affiche sa description sinon "" */}
             </textarea>
 
             <button type="submit">
