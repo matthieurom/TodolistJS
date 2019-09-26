@@ -1,15 +1,26 @@
-.CreateTask {
+.UpsertTodo {
   width: 100%;
 }
 
-.header form {
+.content form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-.CreateTask input,
-.CreateTask textarea {
+.UpsertTodo .header-button {
+  display: flex;
+  justify-content: space-between;
+}
+.UpsertTodo .header-buttonCheckTask {
+  display: flex;
+}
+.UpsertTodo .header-buttonCheckTask p {
+  margin: 0px;
+  width: 100px;
+}
+.UpsertTodo .content input,
+.UpsertTodo textarea {
   box-sizing: border-box;
   padding: 10px;
   font-size: 16px;
@@ -23,7 +34,7 @@
 textarea {
   height: 200px;
 }
-.CreateTask button {
+.UpsertTodo button {
   padding: 10px;
   font-size: 16px;
   width: 150px;

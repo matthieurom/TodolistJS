@@ -3,12 +3,17 @@ import TodoItems from "./TodoItems";
 import "./index.css";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { setTodos } from "../actions/todoActions";
+import axios from "axios";
+//import Loader from "react-loader";
+var Loader = require("react-loaders").Loader;
 
 class Todolist extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: ""
+      value: "",
+      isLoaded: false
     };
   }
 
@@ -17,6 +22,23 @@ class Todolist extends React.Component {
       value: e.target.value
     });
   };
+
+  handleLogout = () => {
+    localStorage.removeItem("token");
+    this.props.history.push("/login");
+  };
+
+  async componentWillMount() {
+    try {
+      const response = await axios.get("http://localhost:8080/todo/", {
+        headers: { Authorization: localStorage.getItem("token") }
+      });
+      this.props.setTodos(response.data);
+      this.setState({ isLoaded: true });
+    } catch {
+      this.props.history.push("/login");
+    }
+  }
 
   addItem = e => {
     // Checking if inputElement is not empty
@@ -36,7 +58,33 @@ class Todolist extends React.Component {
     e.preventDefault();
   };
   render() {
-    console.log("render");
+    if (!this.state.isLoaded) {
+      return (
+        <div className="loader">
+          <Loader
+            loaded={this.state.isLoaded}
+            lines={13}
+            length={20}
+            width={10}
+            radius={30}
+            corners={1}
+            rotate={0}
+            direction={1}
+            color="#3379e8"
+            speed={1}
+            trail={60}
+            shadow={false}
+            hwaccel={false}
+            className="spinner"
+            zIndex={2e9}
+            top="45%"
+            left="50%"
+            scale={0.5}
+            loadedClassName="loadedContent"
+          />
+        </div>
+      );
+    }
     return (
       <div className="todolistMain">
         <div className="header">
@@ -48,11 +96,12 @@ class Todolist extends React.Component {
             ></input>
             <Link to="/create">
               <button>New task</button>
-            </Link>
+            </Link>{" "}
+            <button onClick={this.handleLogout}>Log out</button>
           </div>
         </div>
         <TodoItems
-          entries={this.props.items}
+          entries={this.props.todos}
           onDelete={this.delete}
           value={this.state.value}
         />
@@ -64,4 +113,10 @@ const mapStateToProps = state => {
   return state;
 };
 
-export default connect(mapStateToProps)(Todolist);
+const mapActionsToProps = {
+  setTodos: setTodos
+};
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(Todolist);

@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { updateTodo, addTodo } from "../actions/todoActions";
 import axios from "axios";
 
-class CreateTask extends React.Component {
+class UpsertTodo extends React.Component {
   state = {
     item: null,
     inputTitleValue: ""
@@ -92,17 +92,26 @@ class CreateTask extends React.Component {
     }
 
     return (
-      <div className="CreateTask">
-        {/* On vérifie que params.id existe sinon on a erreur undefined */}
-        {isIdParamEntered ? (
-          <h1>Modify task : {item.titre}</h1>
-        ) : (
-          <h1>Create a task</h1>
-        )}
-        <Link to="/">
-          <button>Back to Todolist</button>
-        </Link>
+      <div className="UpsertTodo">
         <div className="header">
+          {/* On vérifie que params.id existe sinon on a erreur undefined */}
+          {isIdParamEntered ? (
+            <h1>Modify task : {item.titre}</h1>
+          ) : (
+            <h1>Create a task</h1>
+          )}
+          <div className="header-button">
+            <Link to="/">
+              <button>Back to Todolist</button>
+            </Link>
+            <div className="header-buttonCheckTask">
+              <p>Task done ?</p>
+              <input type="checkbox" />
+            </div>
+          </div>
+        </div>
+
+        <div className="content">
           <form onSubmit={isIdParamEntered ? this.onUpdateTodo : this.addItem}>
             <input
               placeholder={isIdParamEntered ? item.titre : "Enter a task name"}
@@ -138,4 +147,4 @@ const mapActionsToProps = {
 export default connect(
   mapStateToProps,
   mapActionsToProps
-)(CreateTask);
+)(UpsertTodo);

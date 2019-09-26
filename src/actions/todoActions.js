@@ -16,9 +16,15 @@ export function deleteTodo(item) {
     payload: item
   };
 }
-export function setTodo(item) {
+export function setTodos(todos) {
   return {
-    type: "SET_ITEM",
-    payload: item
+    type: "SET_TODO",
+    payload: todos
+  };
+}
+export function setUser(user) {
+  return {
+    type: "SET_USER",
+    payload: user
   };
 }
