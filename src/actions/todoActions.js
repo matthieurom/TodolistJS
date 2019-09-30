@@ -1,25 +1,25 @@
-export function updateTodo(item) {
+export function addTodo(todo) {
   return {
-    type: "UPDATE_ITEM",
-    payload: item
+    type: "ADD_TODO",
+    payload: todo
   };
 }
-export function addTodo(item) {
+export function deleteTodo(todo) {
   return {
-    type: "ADD_ITEM",
-    payload: item
-  };
-}
-export function deleteTodo(item) {
-  return {
-    type: "DELETE_ITEM",
-    payload: item
+    type: "DELETE_TODO",
+    payload: todo
   };
 }
 export function setTodos(todos) {
   return {
     type: "SET_TODO",
     payload: todos
+  };
+}
+export function updateTodo(todo) {
+  return {
+    type: "UPDATE_TODO",
+    payload: todo
   };
 }
 export function setUser(user) {

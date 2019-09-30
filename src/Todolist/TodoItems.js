@@ -26,8 +26,13 @@ class TodoItems extends React.Component {
   };
 
   onDeleteTodo = async item => {
-    console.log("Props in onDeleteTodo :", this.props);
-    const response = await axios.delete(`http://localhost:8080/${item._id}`);
+    const response = await axios.patch(
+      `http://localhost:8080/todo/delete/${item._id}`,
+      [],
+      {
+        headers: { Authorization: localStorage.getItem("token") }
+      }
+    );
     this.props.deleteTodo(response.data);
   };
 
@@ -59,8 +64,7 @@ class TodoItems extends React.Component {
     );
   };
   render() {
-    var todoEntries = this.props.entries; // Permet de récupérer les items
-    var listItems = todoEntries
+    var listItems = this.props.entries
       .filter(item => item.titre.includes(this.props.value)) // .filter pour filtrer p/rapport au input tapé dans searchbar
       .map(this.renderTask);
 

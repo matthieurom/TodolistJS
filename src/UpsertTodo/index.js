@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./index.css";
 import { connect } from "react-redux";
-import { updateTodo, addTodo } from "../actions/todoActions";
+import { updateTodo, addTodo, setTodos } from "../actions/todoActions";
 import axios from "axios";
 
 class UpsertTodo extends React.Component {
@@ -10,6 +10,18 @@ class UpsertTodo extends React.Component {
     item: null,
     inputTitleValue: ""
   };
+
+  async componentWillMount() {
+    try {
+      const response = await axios.get("http://localhost:8080/todo/", {
+        headers: { Authorization: localStorage.getItem("token") }
+      });
+      this.props.setTodos(response.data);
+    } catch {
+      this.props.history.push("/login");
+    }
+  }
+
   // Cette fonction vérifie si l'ID est passé par l'url, si oui alors on est dans une modif de tache sinon dans une création de tache
   isIdParamEntered = () => {
     if (
@@ -24,7 +36,7 @@ class UpsertTodo extends React.Component {
   };
 
   getItem = () => {
-    const itemToDisplay = this.props.items.find(
+    const itemToDisplay = this.props.todos.find(
       item => item._id === this.props.match.params.id
     );
     return itemToDisplay;
@@ -40,9 +52,10 @@ class UpsertTodo extends React.Component {
       description: this._textAreaDescriptionElement.value
     };
     axios
-      .patch(`http://localhost:8080/${item._id}`, updateItem)
+      .patch(`http://localhost:8080/todo/${item._id}`, updateItem, {
+        headers: { Authorization: localStorage.getItem("token") }
+      })
       .then(response => this.props.updateTodo(response.data));
-    // this.props.updateTodo(updateItem);
     this.props.history.push("/");
   };
 
@@ -50,14 +63,21 @@ class UpsertTodo extends React.Component {
     console.log("ADDITEM EXECUTED");
     e.preventDefault();
     axios
-      .post("http://localhost:8080", {
-        titre: this._inputTitleElement.value,
-        description: this._textAreaDescriptionElement.value
-      })
+      .post(
+        "http://localhost:8080/todo",
+        {
+          titre: this._inputTitleElement.value,
+          description: this._textAreaDescriptionElement.value,
+          done: false
+        },
+        {
+          headers: { Authorization: localStorage.getItem("token") }
+        }
+      )
       .then(response => {
         this.props.addTodo(response.data);
-        this.props.history.push("/");
       });
+    this.props.history.push("/");
   };
 
   componentDidUpdate() {
@@ -70,15 +90,6 @@ class UpsertTodo extends React.Component {
       });
     }
   }
-
-  handleTitleChange = (e, item) => {
-    var updateItem = this.getItem();
-    if (updateItem) {
-      this.setState({ inputTitleValue: e.target.value });
-    } else {
-      return item.titre;
-    }
-  };
 
   render() {
     console.log("Props in CreateTask: ", this.props);
@@ -117,7 +128,7 @@ class UpsertTodo extends React.Component {
               placeholder={isIdParamEntered ? item.titre : "Enter a task name"}
               ref={a => (this._inputTitleElement = a)}
               value={this.state.inputTitleValue}
-              onChange={e => this.handleTitleChange(e, item)}
+              onChange={e => this.setState({ inputTitleValue: e.target.value })}
             ></input>
             <textarea
               placeholder="Enter a description"
@@ -142,7 +153,8 @@ const mapStateToProps = state => {
 };
 const mapActionsToProps = {
   updateTodo: updateTodo,
-  addTodo: addTodo
+  addTodo: addTodo,
+  setTodos: setTodos
 };
 export default connect(
   mapStateToProps,
