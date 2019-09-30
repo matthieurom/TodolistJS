@@ -13,7 +13,8 @@ class Todolist extends React.Component {
     super(props);
     this.state = {
       value: "",
-      isLoaded: false
+      isLoaded: false,
+      responseFromDb: []
     };
   }
 
@@ -28,63 +29,39 @@ class Todolist extends React.Component {
     this.props.history.push("/login");
   };
 
+  getSetTodos = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/todo/", {
+        headers: { Authorization: localStorage.getItem("token") }
+      });
+      this.props.setTodos(response.data);
+      this.setState({ responseFromDb: response.data });
+    } catch {
+      this.props.history.push("/login");
+    }
+  };
+
+  //ComponentWillMount est appelé pour afficher les todos lors du premier chargement de la page
   async componentWillMount() {
     try {
       const response = await axios.get("http://localhost:8080/todo/", {
         headers: { Authorization: localStorage.getItem("token") }
       });
       this.props.setTodos(response.data);
-      this.setState({ isLoaded: true });
+      this.setState({ responseFromDb: response.data });
     } catch {
       this.props.history.push("/login");
     }
+    console.log("STATE IN WILL MOUNT ", this.state);
   }
 
-  addItem = e => {
-    // Checking if inputElement is not empty
-    if (this._inputElement.value) {
-      var newItem = {
-        titre: this._inputElement.value,
-        _id: Date.now()
-      };
-      this.setState(prevState => {
-        prevState.items.push(newItem);
-        return prevState;
-      });
-    }
+  //componentWillUpdate est appelé pour afficher les todos ajoutés notamment
+  componentDidMount() {
+    // this.props.setTodos(this.state.responseFromDb);
+    console.log("STATE IN Did Mount ", this.state);
+  }
 
-    this._inputElement.value = "";
-    console.log(this.state.items);
-    e.preventDefault();
-  };
   render() {
-    if (!this.state.isLoaded) {
-      return (
-        <div className="loader">
-          <Loader
-            loaded={this.state.isLoaded}
-            lines={13}
-            length={20}
-            width={10}
-            radius={30}
-            corners={1}
-            rotate={0}
-            direction={1}
-            color="#3379e8"
-            speed={1}
-            trail={60}
-            shadow={false}
-            hwaccel={false}
-            className="spinner"
-            zIndex={2e9}
-            top="45%"
-            left="50%"
-            scale={0.5}
-            loadedClassName="loadedContent"
-          />
-        </div>
-      );
-    }
     return (
       <div className="todolistMain">
         <div className="header">
@@ -100,11 +77,7 @@ class Todolist extends React.Component {
             <button onClick={this.handleLogout}>Log out</button>
           </div>
         </div>
-        <TodoItems
-          entries={this.props.todos}
-          onDelete={this.delete}
-          value={this.state.value}
-        />
+        <TodoItems entries={this.props.todos} value={this.state.value} />
       </div>
     );
   }

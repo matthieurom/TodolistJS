@@ -59,24 +59,22 @@ class UpsertTodo extends React.Component {
     this.props.history.push("/");
   };
 
-  addItem = e => {
+  addItem = async e => {
     console.log("ADDITEM EXECUTED");
     e.preventDefault();
-    axios
-      .post(
-        "http://localhost:8080/todo",
-        {
-          titre: this._inputTitleElement.value,
-          description: this._textAreaDescriptionElement.value,
-          done: false
-        },
-        {
-          headers: { Authorization: localStorage.getItem("token") }
-        }
-      )
-      .then(response => {
-        this.props.addTodo(response.data);
-      });
+    const response = await axios.post(
+      "http://localhost:8080/todo",
+      {
+        titre: this._inputTitleElement.value,
+        description: this._textAreaDescriptionElement.value,
+        done: false
+      },
+      {
+        headers: { Authorization: localStorage.getItem("token") }
+      }
+    );
+
+    this.props.addTodo(response.data);
     this.props.history.push("/");
   };
 

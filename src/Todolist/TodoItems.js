@@ -33,7 +33,9 @@ class TodoItems extends React.Component {
         headers: { Authorization: localStorage.getItem("token") }
       }
     );
-    this.props.deleteTodo(response.data);
+
+    this.props.deleteTodo(response.data.todos);
+    console.log("PROPS IN REDU AFTER DELETE", this.props);
   };
 
   renderTask = item => {

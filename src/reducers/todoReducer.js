@@ -30,8 +30,8 @@ export default function todoReducer(state = initialState, action) {
       });
       return { ...state, todos: newTodo };
     case "DELETE_TODO":
-      newTodo = state.todos.filter(todo => todo._id !== action.payload._id);
-      return { ...state, todos: newTodo };
+      // newTodo = state.todos.filter(todo => todo._id !== action.payload._id);
+      return { ...state, todos: action.payload };
     default:
       return state;
   }
