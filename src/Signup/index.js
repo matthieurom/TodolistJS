@@ -11,6 +11,13 @@ class Signup extends React.Component {
     isPasswordIncorrect: false
   };
 
+  // Vérifie si l'utilisateur est connecté, si oui alors redirection vers la liste des todo
+  componentWillMount() {
+    if (localStorage.getItem("token")) {
+      this.props.history.push("/");
+    }
+  }
+
   handleLoginChange = e => {
     this.setState({
       inputLoginValue: e.target.value
@@ -39,7 +46,12 @@ class Signup extends React.Component {
 
   handleSignup = async e => {
     e.preventDefault();
-    if (this.passwordVerification()) {
+    if (
+      this.passwordVerification() &&
+      this.state.inputLoginValue !== "" &&
+      this.state.inputPasswordValue !== "" &&
+      this.state.inputPasswordValueVerif !== ""
+    ) {
       let newUser = {
         login: this.state.inputLoginValue,
         password: this.state.inputPasswordValue
