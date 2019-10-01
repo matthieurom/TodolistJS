@@ -77,7 +77,7 @@ button:hover {
 .listItems li span svg:hover {
   color: #cf7d7b;
 }
-.listItems li .item.task_checked {
+.listItems li .item.task_checked:not(.open) {
   opacity: 0.2;
 }
 .listItems .item {
