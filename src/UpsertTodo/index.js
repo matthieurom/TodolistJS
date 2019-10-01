@@ -43,7 +43,6 @@ class UpsertTodo extends React.Component {
   };
 
   onUpdateTodo = e => {
-    console.log("Props in onUpdateTodo :", this.props);
     e.preventDefault();
     var item = this.getItem();
     var updateItem = {
@@ -60,7 +59,6 @@ class UpsertTodo extends React.Component {
   };
 
   addItem = async e => {
-    console.log("ADDITEM EXECUTED");
     e.preventDefault();
     const response = await axios.post(
       "http://localhost:8080/todo",
@@ -90,7 +88,6 @@ class UpsertTodo extends React.Component {
   }
 
   render() {
-    console.log("Props in CreateTask: ", this.props);
     const isIdParamEntered = this.isIdParamEntered();
     var item = null;
     if (isIdParamEntered) {
@@ -113,10 +110,6 @@ class UpsertTodo extends React.Component {
             <Link to="/">
               <button>Back to Todolist</button>
             </Link>
-            <div className="header-buttonCheckTask">
-              <p>Task done ?</p>
-              <input type="checkbox" />
-            </div>
           </div>
         </div>
 

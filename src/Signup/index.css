@@ -1,0 +1,21 @@
+.SignupMain {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15%;
+}
+.SignupMain button {
+  padding: 10px;
+  font-size: 16px;
+  width: 150px;
+  color: #fff;
+  border: 2px solid #3379e8;
+  background-color: #3379e8;
+  margin: 5px;
+  transition: opacity 0.15s ease-out;
+}
+button:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}

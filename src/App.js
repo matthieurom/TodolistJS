@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import UpsertTodo from "./UpsertTodo/index";
 import Login from "./Login/index";
+import Signup from "./Signup/index";
 
 class App extends React.Component {
   // onSetTodo = async () => {
@@ -20,7 +21,8 @@ class App extends React.Component {
           <Route path="/login" component={Login} />
           <Route path="/create" component={UpsertTodo} />
           <Route path="/update/:id" component={UpsertTodo} />
-          <Route path="/" component={Todolist} />
+          <Route path="/register" component={Signup} />
+          <Route path="/" exact={true} component={Todolist} />
         </Switch>
       </Router>
     );

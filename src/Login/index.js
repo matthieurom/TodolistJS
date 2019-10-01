@@ -32,7 +32,6 @@ class Login extends React.Component {
         password: this.state.inputPasswordValue
       });
       localStorage.setItem("token", response.data);
-      console.log("token is :", localStorage.getItem("token"));
       this.props.history.push("/");
     } catch {
       this.setState({
@@ -42,7 +41,6 @@ class Login extends React.Component {
   };
 
   render() {
-    console.log("props in render :", this.props);
     return (
       <div className="loginMain">
         <div className="form-content">
@@ -70,7 +68,7 @@ class Login extends React.Component {
               ""
             )}
             <div className="form-content-button">
-              <Link to="/">
+              <Link to="/register">
                 <p>Sign up</p>
               </Link>
               <button type="submit">Login</button>
